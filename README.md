@@ -2,7 +2,7 @@
 
 > Replace Stripe Tax with self-hosted [OpenSalesTax](https://github.com/ejosterberg/open-sales-tax). Server-side US sales tax calculation library for PHP SaaS using Stripe.
 
-[![License](https://img.shields.io/badge/license-Apache%202.0-blue)](LICENSE) [![PHP](https://img.shields.io/badge/php-%E2%89%A58.1-777bb4)](composer.json)
+[![License](https://img.shields.io/badge/license-Apache%202.0-blue)](LICENSE) [![PHP](https://img.shields.io/badge/php-%E2%89%A58.2-777bb4)](composer.json)
 
 **Status:** v0.1 alpha. Tested against `stripe/stripe-php` v20 + OpenSalesTax engine v0.24.
 
@@ -44,7 +44,7 @@ This pulls in:
 
 You'll also need:
 
-- **PHP 8.1+**
+- **PHP 8.2+** (uses class-level `readonly` syntax)
 - **A reachable OpenSalesTax engine.** Self-host with the [engine's docker-compose](https://github.com/ejosterberg/open-sales-tax) — about 5 minutes if you have Docker.
 
 ## Production deployment guide
@@ -231,7 +231,7 @@ OpenSalesTax + this connector trades operational responsibility (run a small eng
 - **PHPStan level=max** — zero suppressed errors
 - **PHP-CS-Fixer** with PSR-12 + risky rules — zero violations
 - **PHPUnit** — 29 unit tests, 100 assertions, all passing
-- **GitHub Actions CI** matrix on PHP 8.1 / 8.2 / 8.3
+- **GitHub Actions CI** matrix on PHP 8.2 / 8.3 / 8.4
 - **DCO sign-off** required on every commit
 
 ## Engine compatibility
