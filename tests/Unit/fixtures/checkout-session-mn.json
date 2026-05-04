@@ -1,0 +1,43 @@
+{
+    "id": "cs_test_2xyz",
+    "object": "checkout.session",
+    "currency": "usd",
+    "mode": "subscription",
+    "status": "complete",
+    "customer": "cus_test_2xyz",
+    "customer_details": {
+        "address": {
+            "city": "St. Paul",
+            "country": "US",
+            "line1": "456 Sample Ave",
+            "line2": null,
+            "postal_code": "55101",
+            "state": "MN"
+        },
+        "email": "test@example.com",
+        "name": "Test Customer"
+    },
+    "shipping_details": null,
+    "line_items": {
+        "object": "list",
+        "data": [
+            {
+                "id": "li_1xxx",
+                "object": "item",
+                "amount_subtotal": 7500,
+                "amount_total": 7500,
+                "currency": "usd",
+                "description": "Pro plan — annual",
+                "price": {
+                    "id": "price_pro_annual",
+                    "object": "price",
+                    "tax_code": "txcd_10103001",
+                    "unit_amount": 7500,
+                    "currency": "usd"
+                }
+            }
+        ],
+        "has_more": false,
+        "url": "/v1/checkout/sessions/cs_test_2xyz/line_items"
+    }
+}

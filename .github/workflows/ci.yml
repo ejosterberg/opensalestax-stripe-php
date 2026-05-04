@@ -1,0 +1,65 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  test:
+    name: PHP ${{ matrix.php }} — lint + stan + phpunit
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        php: ['8.1', '8.2', '8.3']
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup PHP ${{ matrix.php }}
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php }}
+          coverage: none
+          tools: composer:v2
+
+      - name: Install dependencies
+        run: composer install --no-progress --prefer-dist --no-interaction
+
+      - name: Lint (php-cs-fixer)
+        run: vendor/bin/php-cs-fixer fix --dry-run --diff
+
+      - name: Static analysis (phpstan)
+        run: vendor/bin/phpstan analyse --no-progress
+
+      - name: Unit tests
+        run: vendor/bin/phpunit --testsuite=unit
+
+  dco:
+    name: DCO sign-off check
+    runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Verify DCO sign-off on every commit
+        run: |
+          base="${{ github.event.pull_request.base.sha }}"
+          head="${{ github.event.pull_request.head.sha }}"
+          missing=0
+          for sha in $(git rev-list "$base..$head"); do
+            if ! git log -1 --format="%B" "$sha" | grep -qE "^Signed-off-by: "; then
+              echo "Missing Signed-off-by on $sha"
+              git log -1 --format="  %h %s" "$sha"
+              missing=1
+            fi
+          done
+          if [ "$missing" -ne 0 ]; then
+            echo ""
+            echo "::error::One or more commits are missing DCO sign-off."
+            echo "Amend with: git commit --amend -s    (or rebase + sign each commit)"
+            exit 1
+          fi

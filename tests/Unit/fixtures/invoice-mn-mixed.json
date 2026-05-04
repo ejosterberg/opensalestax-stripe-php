@@ -1,0 +1,67 @@
+{
+    "id": "in_test_1abc",
+    "object": "invoice",
+    "currency": "usd",
+    "status": "draft",
+    "customer": "cus_test_1abc",
+    "customer_address": {
+        "city": "Minneapolis",
+        "country": "US",
+        "line1": "123 Test St",
+        "line2": null,
+        "postal_code": "55401",
+        "state": "MN"
+    },
+    "customer_shipping": null,
+    "lines": {
+        "object": "list",
+        "data": [
+            {
+                "id": "il_1aaa",
+                "object": "line_item",
+                "amount": 10000,
+                "currency": "usd",
+                "description": "Pro plan — monthly",
+                "price": {
+                    "id": "price_pro_monthly",
+                    "object": "price",
+                    "tax_code": "txcd_10103001",
+                    "unit_amount": 10000,
+                    "currency": "usd"
+                }
+            },
+            {
+                "id": "il_2bbb",
+                "object": "line_item",
+                "amount": 5000,
+                "currency": "usd",
+                "description": "Add-on integration",
+                "price": {
+                    "id": "price_addon",
+                    "object": "price",
+                    "tax_code": "txcd_99999999",
+                    "unit_amount": 5000,
+                    "currency": "usd"
+                }
+            },
+            {
+                "id": "il_3ccc",
+                "object": "line_item",
+                "amount": 2500,
+                "currency": "usd",
+                "description": "Account credit (refund)",
+                "price": {
+                    "id": "price_credit",
+                    "object": "price",
+                    "tax_code": "txcd_00000000",
+                    "unit_amount": 2500,
+                    "currency": "usd"
+                }
+            }
+        ],
+        "has_more": false,
+        "url": "/v1/invoices/in_test_1abc/lines"
+    },
+    "subtotal": 17500,
+    "total": 17500
+}
