@@ -18,4 +18,4 @@ Versioning: [SemVer](https://semver.org).
 - `OpenSalesTax\Stripe\LineExtractor` — pulls line amount + tax code per Stripe invoice line / session line item
 - Exceptions: `OpenSalesTaxStripeException` (base), `NonUSDException`, `MissingAddressException`, `UnsupportedSourceException`
 - PHPUnit test suite — fixture-based unit tests + gated live integration test
-- GitHub Actions CI on PHP 8.1 / 8.2 / 8.3
+- GitHub Actions CI on PHP 8.2 / 8.3 / 8.4

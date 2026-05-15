@@ -3,21 +3,24 @@
     "description": "Stripe Tax replacement using OpenSalesTax — server-side calculation library for PHP SaaS.",
     "type": "library",
     "license": "Apache-2.0",
-    "keywords": ["stripe", "stripe-tax", "opensalestax", "tax", "sales-tax", "saas"],
+    "keywords": [
+        "stripe",
+        "stripe-tax",
+        "opensalestax",
+        "tax",
+        "sales-tax",
+        "saas"
+    ],
     "homepage": "https://github.com/ejosterberg/opensalestax-stripe-php",
     "authors": [
-        {"name": "Eric Osterberg", "email": "ejosterberg@gmail.com"}
-    ],
-    "repositories": [
         {
-            "type": "path",
-            "url": "../opensalestax-php",
-            "options": {"symlink": true}
+            "name": "Eric Osterberg",
+            "email": "ejosterberg@gmail.com"
         }
     ],
     "require": {
         "php": ">=8.2",
-        "ejosterberg/opensalestax": "dev-main as 0.1.0",
+        "ejosterberg/opensalestax": "^0.1",
         "stripe/stripe-php": "^20.0"
     },
     "require-dev": {
@@ -26,10 +29,14 @@
         "friendsofphp/php-cs-fixer": "^3.59"
     },
     "autoload": {
-        "psr-4": {"OpenSalesTax\\Stripe\\": "src/"}
+        "psr-4": {
+            "OpenSalesTax\\Stripe\\": "src/"
+        }
     },
     "autoload-dev": {
-        "psr-4": {"OpenSalesTax\\Stripe\\Tests\\": "tests/"}
+        "psr-4": {
+            "OpenSalesTax\\Stripe\\Tests\\": "tests/"
+        }
     },
     "scripts": {
         "test": "phpunit --testsuite=unit",
