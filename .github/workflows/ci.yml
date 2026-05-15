@@ -20,15 +20,11 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      # The SDK is consumed via Composer path-repo at ../opensalestax-php.
-      # On the runner, clone the SDK into the sibling path so the path-repo
-      # resolves. This works once the SDK repo is public (default GITHUB_TOKEN
-      # can clone public repos cross-repo without a PAT).
-      - name: Checkout PHP SDK alongside (for path-repo resolution)
-        uses: actions/checkout@v4
-        with:
-          repository: ejosterberg/opensalestax-php
-          path: ../opensalestax-php
+      # As of 2026-05-15 the SDK is published on Packagist as
+      # `ejosterberg/opensalestax`, so Composer resolves it normally.
+      # The earlier "Checkout PHP SDK alongside" step is no longer needed.
+      # If you bring the path-repo back for local development, add the
+      # step back here too.
 
       - name: Setup PHP ${{ matrix.php }}
         uses: shivammathur/setup-php@v2
