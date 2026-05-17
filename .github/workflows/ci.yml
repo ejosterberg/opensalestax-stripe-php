@@ -18,7 +18,7 @@ jobs:
         php: ['8.2', '8.3', '8.4']
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
 
       # As of 2026-05-15 the SDK is published on Packagist as
       # `ejosterberg/opensalestax`, so Composer resolves it normally.
@@ -53,7 +53,7 @@ jobs:
     runs-on: ubuntu-latest
     if: github.event_name == 'pull_request'
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
         with:
           fetch-depth: 0
       - name: Verify DCO sign-off on every commit
