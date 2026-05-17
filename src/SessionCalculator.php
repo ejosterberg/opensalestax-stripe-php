@@ -1,6 +1,6 @@
 <?php
 
-// SPDX-License-Identifier: Apache-2.0
+// SPDX-License-Identifier: Apache-2.0 OR GPL-2.0-or-later
 
 declare(strict_types=1);
 
@@ -16,7 +16,7 @@ use Stripe\Checkout\Session;
  * Public entrypoint. Stateless. Delegate is `calculateForCheckoutSession()`.
  *
  * IMPORTANT: When retrieving the session, expand `line_items` so the
- * connector can read them — Stripe doesn't include them in the basic
+ * connector can read them â€” Stripe doesn't include them in the basic
  * Session payload by default:
  *
  *   $session = \Stripe\Checkout\Session::retrieve(

@@ -1,6 +1,6 @@
 <?php
 
-// SPDX-License-Identifier: Apache-2.0
+// SPDX-License-Identifier: Apache-2.0 OR GPL-2.0-or-later
 
 declare(strict_types=1);
 
@@ -58,7 +58,7 @@ final class TaxCodeMapTest extends TestCase
     public function testNontaxableResolvesToGeneralAsLastResort(): void
     {
         // Callers SHOULD short-circuit via isNontaxable() before calling resolve(),
-        // but if they don't, resolve() must not crash — fall back to general.
+        // but if they don't, resolve() must not crash â€” fall back to general.
         $map = new TaxCodeMap();
         self::assertSame('general', $map->resolve(TaxCodeMap::NONTAXABLE_CODE));
     }

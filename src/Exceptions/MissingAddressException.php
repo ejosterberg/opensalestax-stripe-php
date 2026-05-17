@@ -1,6 +1,6 @@
 <?php
 
-// SPDX-License-Identifier: Apache-2.0
+// SPDX-License-Identifier: Apache-2.0 OR GPL-2.0-or-later
 
 declare(strict_types=1);
 
@@ -23,7 +23,7 @@ final class MissingAddressException extends OpenSalesTaxStripeException
     ) {
         $msg = "No billing-address ZIP found on Stripe object '{$stripeObjectId}'";
         if ($detail !== '') {
-            $msg .= ' — ' . $detail;
+            $msg .= ' â€” ' . $detail;
         }
         parent::__construct($msg);
     }

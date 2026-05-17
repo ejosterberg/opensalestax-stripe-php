@@ -1,6 +1,6 @@
 <?php
 
-// SPDX-License-Identifier: Apache-2.0
+// SPDX-License-Identifier: Apache-2.0 OR GPL-2.0-or-later
 
 declare(strict_types=1);
 
@@ -14,7 +14,7 @@ namespace OpenSalesTax\Stripe;
  * `general`. Two specials:
  * - `txcd_00000000` ("Nontaxable") signals the line should be EXCLUDED
  *   from the OpenSalesTax calculation entirely; check via `isNontaxable()`.
- * - Custom mappings can be injected via the constructor — pass
+ * - Custom mappings can be injected via the constructor â€” pass
  *   `['txcd_xxxxxxxx' => 'category', ...]` to override or extend.
  *
  * OpenSalesTax engine v0.22 categories: general (default), clothing,
@@ -25,17 +25,17 @@ final class TaxCodeMap
     /** @var array<string, string> */
     private const DEFAULT_MAP = [
         // Catch-alls
-        'txcd_99999999' => 'general',         // General — Tangible Goods
-        'txcd_20030000' => 'general',         // General — Services
+        'txcd_99999999' => 'general',         // General â€” Tangible Goods
+        'txcd_20030000' => 'general',         // General â€” Services
 
-        // SaaS family — most common for B2B/B2C SaaS
-        'txcd_10103001' => 'digital_goods',   // SaaS — Business
-        'txcd_10103000' => 'digital_goods',   // SaaS — Personal
+        // SaaS family â€” most common for B2B/B2C SaaS
+        'txcd_10103001' => 'digital_goods',   // SaaS â€” Business
+        'txcd_10103000' => 'digital_goods',   // SaaS â€” Personal
 
         // Cloud infrastructure family
-        'txcd_10101000' => 'digital_goods',   // IaaS — Business
-        'txcd_10102000' => 'digital_goods',   // PaaS — Business
-        'txcd_10105002' => 'digital_goods',   // AIaaS — Business
+        'txcd_10101000' => 'digital_goods',   // IaaS â€” Business
+        'txcd_10102000' => 'digital_goods',   // PaaS â€” Business
+        'txcd_10105002' => 'digital_goods',   // AIaaS â€” Business
 
         // Digital media
         'txcd_10302000' => 'digital_goods',   // Digital Books
@@ -55,7 +55,7 @@ final class TaxCodeMap
     private $warningHandler = null;
 
     /**
-     * @param array<string, string> $overrides Custom Stripe code → OST category overrides; merged into the default map.
+     * @param array<string, string> $overrides Custom Stripe code â†’ OST category overrides; merged into the default map.
      */
     public function __construct(array $overrides = [])
     {
@@ -69,7 +69,7 @@ final class TaxCodeMap
      * (also fires the warning handler if one is registered).
      *
      * For `txcd_00000000` (Nontaxable), call `isNontaxable()` separately
-     * BEFORE resolving — this method returns `general` for nontaxable
+     * BEFORE resolving â€” this method returns `general` for nontaxable
      * codes (callers should be skipping them, not mapping them).
      */
     public function resolve(string $stripeCode): string
@@ -90,7 +90,7 @@ final class TaxCodeMap
      * True if the line should be excluded from the OpenSalesTax request entirely.
      *
      * Stripe's `txcd_00000000` is a policy override meaning "no tax in any
-     * jurisdiction" — sending this through OpenSalesTax would apply normal
+     * jurisdiction" â€” sending this through OpenSalesTax would apply normal
      * tax, which is wrong.
      */
     public function isNontaxable(string $stripeCode): bool

@@ -12,9 +12,9 @@ CI enforces this on every PR. See https://developercertificate.org for the full 
 
 ## License
 
-By contributing you agree your contribution is licensed under Apache 2.0 (the project's LICENSE).
+By contributing you agree your contribution is dual-licensed under your choice of Apache-2.0 OR GPL-2.0-or-later (the project's LICENSE).
 
-Every source file must carry an `SPDX-License-Identifier: Apache-2.0` header.
+Every source file must carry an `SPDX-License-Identifier: Apache-2.0 OR GPL-2.0-or-later` header.
 
 ## Dev install (while the repo is private)
 

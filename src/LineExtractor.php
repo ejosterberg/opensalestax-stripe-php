@@ -1,6 +1,6 @@
 <?php
 
-// SPDX-License-Identifier: Apache-2.0
+// SPDX-License-Identifier: Apache-2.0 OR GPL-2.0-or-later
 
 declare(strict_types=1);
 
@@ -55,7 +55,7 @@ final class LineExtractor
 
             $amountCents = (int) ($line->amount ?? 0);
             if ($amountCents === 0) {
-                continue; // zero-value lines (proration credits, etc.) — skip
+                continue; // zero-value lines (proration credits, etc.) â€” skip
             }
 
             $lineItems[] = new LineItem(
@@ -85,7 +85,7 @@ final class LineExtractor
         if (!is_object($lineItemsObj) || !is_array($lineItemsObj->data ?? null)) {
             throw new UnsupportedSourceException(
                 "Stripe checkout session '" . (string) ($session->id ?? 'unknown')
-                    . "' has no line_items.data — make sure to expand 'line_items' when retrieving the session",
+                    . "' has no line_items.data â€” make sure to expand 'line_items' when retrieving the session",
             );
         }
 

@@ -6,6 +6,30 @@ Versioning: [SemVer](https://semver.org).
 
 ## [Unreleased]
 
+## [0.1.2] — 2026-05-17
+
+### Changed
+
+- **Dual-licensed Apache-2.0 OR GPL-2.0-or-later.** Adds GPL-2.0-or-later as
+  an alternative license alongside the existing Apache-2.0 grant, enabling
+  downstream redistribution in GPL-only ecosystems without giving up Apache
+  compatibility. License files reorganized: `LICENSE-APACHE.txt` (existing
+  Apache text, moved from `LICENSE`), `LICENSE-GPL.txt` (new, GNU GPL v2
+  text), `LICENSE` (new dual-declaration). SPDX headers updated across
+  source files. `composer.json` `license` field switched from string to
+  array form. Brings this connector in line with the rest of the
+  OpenSalesTax portfolio's dual-licensing standard.
+- **SDK requirement tightened to `^0.1.1`** (was `^0.1`) — pin the published
+  stable instead of accepting the bootstrap `0.1.0`. `composer.lock`
+  refreshed; no API-surface changes.
+
+### Added
+
+- **`.github/dependabot.yml`** — weekly checks for composer + GitHub Actions
+  dependencies, with grouped dev-dep PRs. Brings this repo in line with
+  the rest of the OpenSalesTax connector portfolio's supply-chain hygiene
+  standard.
+
 ## [0.1.1] — 2026-05-15
 
 ### Fixed

@@ -2,7 +2,7 @@
 
 > Replace Stripe Tax with self-hosted [OpenSalesTax](https://github.com/ejosterberg/open-sales-tax). Server-side US sales tax calculation library for PHP SaaS using Stripe.
 
-[![License](https://img.shields.io/badge/license-Apache%202.0-blue)](LICENSE) [![PHP](https://img.shields.io/badge/php-%E2%89%A58.2-777bb4)](composer.json)
+[![License](https://img.shields.io/badge/license-Apache%202.0%20OR%20GPL%202.0--or--later-blue)](LICENSE) [![PHP](https://img.shields.io/badge/php-%E2%89%A58.2-777bb4)](composer.json)
 
 **Status:** v0.1 alpha. Tested against `stripe/stripe-php` v20 + OpenSalesTax engine v0.24.
 
@@ -249,8 +249,8 @@ opensalestax engine:                 v0.22+
 
 ## Contributing
 
-DCO sign-off (`git commit -s`) required on every commit. See [CONTRIBUTING.md](CONTRIBUTING.md). Apache 2.0 + SPDX header on every source file.
+DCO sign-off (`git commit -s`) required on every commit. See [CONTRIBUTING.md](CONTRIBUTING.md). Dual-licensed Apache-2.0 OR GPL-2.0-or-later + SPDX header on every source file.
 
 ## License
 
-[Apache 2.0](LICENSE).
+Dual-licensed under your choice of [Apache-2.0](LICENSE-APACHE.txt) OR [GPL-2.0-or-later](LICENSE-GPL.txt). See [LICENSE](LICENSE).

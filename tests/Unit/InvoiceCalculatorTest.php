@@ -1,6 +1,6 @@
 <?php
 
-// SPDX-License-Identifier: Apache-2.0
+// SPDX-License-Identifier: Apache-2.0 OR GPL-2.0-or-later
 
 declare(strict_types=1);
 
@@ -22,7 +22,7 @@ final class InvoiceCalculatorTest extends TestCase
     {
         $invoice = $this->loadInvoice('invoice-mn-mixed.json');
 
-        // Engine response — 2 line items in (after nontaxable was filtered out).
+        // Engine response â€” 2 line items in (after nontaxable was filtered out).
         // SaaS line $100 @ ~7% + general line $50 @ ~7% with MN jurisdiction stack.
         $cannedResponse = [
             'subtotal' => '150.00',
@@ -105,7 +105,7 @@ final class InvoiceCalculatorTest extends TestCase
 
     public function testAllNontaxableLinesShortCircuitsEngine(): void
     {
-        // Invoice where every line is the nontaxable code — should NOT call the engine
+        // Invoice where every line is the nontaxable code â€” should NOT call the engine
         $invoice = Util::convertToStripeObject([
             'id' => 'in_all_nt',
             'object' => 'invoice',
@@ -126,7 +126,7 @@ final class InvoiceCalculatorTest extends TestCase
         ], []);
         self::assertInstanceOf(Invoice::class, $invoice);
 
-        // HTTP client mock that asserts it was NEVER called — if it is, the test fails
+        // HTTP client mock that asserts it was NEVER called â€” if it is, the test fails
         $mockHttp = $this->createMock(ClientInterface::class);
         $mockHttp->expects(self::never())->method('sendRequest');
         $ostClient = new OpenSalesTaxClient(baseUrl: 'http://test', httpClient: $mockHttp);
