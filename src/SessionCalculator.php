@@ -7,6 +7,7 @@ declare(strict_types=1);
 namespace OpenSalesTax\Stripe;
 
 use OpenSalesTax\Client as OpenSalesTaxClient;
+use OpenSalesTax\Shipping;
 use OpenSalesTax\Stripe\Exceptions\NonUSDException;
 use Stripe\Checkout\Session;
 
@@ -56,9 +57,12 @@ final class SessionCalculator
             );
         }
 
+        $shipping = self::extractShipping($session);
+
         $engineResponse = $ostClient->calculate(
             address: $address,
             lineItems: $extracted['line_items'],
+            shipping: $shipping,
         );
 
         return TaxBreakdown::fromEngineResponse(
@@ -66,6 +70,37 @@ final class SessionCalculator
             $extracted['stripe_line_ids'],
             $extracted['skipped_nontaxable_ids'],
         );
+    }
+
+    /**
+     * Extract a typed Shipping value object from a Stripe CheckoutSession's
+     * `shipping_cost->amount_subtotal` (pre-tax shipping amount in the
+     * session's smallest currency unit — cents for USD). Returns null when
+     * no shipping cost is set or the amount is zero/negative.
+     *
+     * CP-9 / SDK v0.3.0: lets the engine apply per-state shipping-taxability
+     * rules (MN "tax-if-items-taxable", MO/VA "separately-stated", MD
+     * "shipping-vs-handling") instead of forcing callers to invent rates.
+     */
+    private static function extractShipping(Session $session): ?Shipping
+    {
+        $shippingCost = $session->shipping_cost ?? null;
+        if ($shippingCost === null) {
+            return null;
+        }
+        $cents = $shippingCost->amount_subtotal ?? null;
+        if (!is_int($cents) || $cents <= 0) {
+            return null;
+        }
+        $dollars = number_format($cents / 100, 2, '.', '');
+        try {
+            return new Shipping(
+                amount: $dollars,
+                separatelyStated: true,
+            );
+        } catch (\Throwable) {
+            return null;
+        }
     }
 
     private static function assertUSD(Session $session): void

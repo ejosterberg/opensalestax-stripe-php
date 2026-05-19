@@ -6,6 +6,46 @@ Versioning: [SemVer](https://semver.org).
 
 ## [Unreleased]
 
+## [0.2.0] — 2026-05-19
+
+### Added
+
+- **CP-9 first-class shipping support on Checkout Sessions.**
+  `SessionCalculator::calculateForCheckoutSession()` now extracts
+  the session's `shipping_cost.amount_subtotal` (in minor units) and
+  sends it to the OpenSalesTax engine as a top-level `shipping`
+  field via `ejosterberg/opensalestax` v0.3.0. The engine applies
+  per-state shipping-taxability rules internally — MN's
+  "tax-if-items-taxable", MO/VA's "separately-stated", MD's
+  "shipping-vs-handling" distinction — so callers don't have to
+  reinvent them.
+- `TaxBreakdown::$shipping` (`CalculatedShipping|null`) surfaces the
+  engine's per-state shipping tax to the consumer. Null when the
+  session has no `shipping_cost` OR the engine returned no shipping
+  result. 2 new unit tests covering the with-shipping and
+  without-shipping paths (asserts both the outgoing wire body AND
+  the breakdown surface).
+- Invoice path unchanged — Stripe Invoice doesn't have a separate
+  pre-tax shipping field, so the existing line-item path is the
+  right shape. A future minor release can add per-line shipping
+  detection (`tax_code='txcd_99999999'` or
+  `description LIKE 'Shipping%'`) if merchant feedback indicates
+  demand.
+
+### Changed
+
+- **Bumps `ejosterberg/opensalestax` constraint from `^0.2.0` to
+  `^0.3.0`.** Picks up the new third arg on `Client::calculate(addr,
+  lines, shipping?)` plus `CalculateResponse::$shipping` and
+  `$coverageWarning`. Backward compatible — Invoice and shipping-
+  less Session paths behave identically to v0.1.3.
+
+### Notes
+
+- Engine v0.59.0+ required for shipping to be honored. Older
+  engines silently ignore the field; the breakdown's shipping is
+  null and tax is item-only.
+
 ## [0.1.3] — 2026-05-19
 
 ### Changed

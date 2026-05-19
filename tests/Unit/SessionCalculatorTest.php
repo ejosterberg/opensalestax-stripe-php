@@ -71,6 +71,99 @@ final class SessionCalculatorTest extends TestCase
         SessionCalculator::calculateForCheckoutSession($session, $ostClient);
     }
 
+    // CP-9 / SDK v0.3.0: first-class shipping support.
+    public function testSessionShippingCostPassedToEngineAndSurfacedInBreakdown(): void
+    {
+        // Build a session WITH shipping_cost.amount_subtotal = 1250 (cents = $12.50).
+        $sessionData = json_decode(
+            (string) file_get_contents(__DIR__ . '/fixtures/checkout-session-mn.json'),
+            true,
+            512,
+            JSON_THROW_ON_ERROR,
+        );
+        $sessionData['shipping_cost'] = ['amount_subtotal' => 1250];
+        $session = Util::convertToStripeObject($sessionData, []);
+        self::assertInstanceOf(Session::class, $session);
+
+        $cannedResponse = [
+            'subtotal' => '75.00',
+            'tax_total' => '6.0188',
+            'lines' => [
+                [
+                    'amount' => '75.00', 'category' => 'digital_goods',
+                    'tax' => '6.0188', 'rate_pct' => '8.025', 'jurisdictions' => [],
+                ],
+            ],
+            'disclaimer' => '',
+            'shipping' => [
+                'amount' => '12.50',
+                'tax_amount' => '1.0031',
+                'rate_pct' => '8.025',
+                'taxable_reason' => 'MN taxes shipping when items are taxable.',
+            ],
+        ];
+
+        // Capture the outgoing request body so we can assert the shipping
+        // field made it into the wire payload.
+        $captured = ['body' => null];
+        $http = $this->createMock(ClientInterface::class);
+        $http->method('sendRequest')->willReturnCallback(
+            static function (RequestInterface $req) use ($cannedResponse, &$captured) {
+                $captured['body'] = (string) $req->getBody();
+                return new Response(
+                    200,
+                    ['Content-Type' => 'application/json'],
+                    json_encode($cannedResponse, JSON_THROW_ON_ERROR),
+                );
+            },
+        );
+        $ostClient = new OpenSalesTaxClient(baseUrl: 'http://mock', httpClient: $http);
+
+        $breakdown = SessionCalculator::calculateForCheckoutSession($session, $ostClient);
+
+        // Shipping in wire body
+        self::assertNotNull($captured['body']);
+        $sent = json_decode((string) $captured['body'], true, 512, JSON_THROW_ON_ERROR);
+        self::assertIsArray($sent);
+        self::assertArrayHasKey('shipping', $sent);
+        self::assertSame('12.50', $sent['shipping']['amount']);
+
+        // Engine-returned shipping surfaced on the breakdown
+        self::assertNotNull($breakdown->shipping);
+        self::assertSame('1.0031', $breakdown->shipping->taxAmount);
+        self::assertSame('12.50', $breakdown->shipping->amount);
+    }
+
+    public function testSessionWithoutShippingOmitsFieldFromRequest(): void
+    {
+        $session = $this->loadSession('checkout-session-mn.json');
+        // No shipping_cost on this fixture.
+
+        $cannedResponse = [
+            'subtotal' => '75.00', 'tax_total' => '6.0188',
+            'lines' => [['amount' => '75.00', 'category' => 'digital_goods', 'tax' => '6.0188', 'rate_pct' => '8.025', 'jurisdictions' => []]],
+            'disclaimer' => '',
+        ];
+
+        $captured = ['body' => null];
+        $http = $this->createMock(ClientInterface::class);
+        $http->method('sendRequest')->willReturnCallback(
+            static function (RequestInterface $req) use ($cannedResponse, &$captured) {
+                $captured['body'] = (string) $req->getBody();
+                return new Response(200, [], json_encode($cannedResponse, JSON_THROW_ON_ERROR));
+            },
+        );
+        $ostClient = new OpenSalesTaxClient(baseUrl: 'http://mock', httpClient: $http);
+
+        $breakdown = SessionCalculator::calculateForCheckoutSession($session, $ostClient);
+
+        self::assertNotNull($captured['body']);
+        $sent = json_decode((string) $captured['body'], true, 512, JSON_THROW_ON_ERROR);
+        self::assertIsArray($sent);
+        self::assertArrayNotHasKey('shipping', $sent);
+        self::assertNull($breakdown->shipping);
+    }
+
     /**
      * @param array<string, mixed> $cannedResponseBody
      */

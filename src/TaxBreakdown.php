@@ -7,6 +7,7 @@ declare(strict_types=1);
 namespace OpenSalesTax\Stripe;
 
 use OpenSalesTax\Responses\CalculateResponse;
+use OpenSalesTax\Responses\CalculatedShipping;
 
 /**
  * Result of a Stripe-source tax calculation.
@@ -23,6 +24,7 @@ final readonly class TaxBreakdown
      * @param list<array{stripe_line_id: string, amount: string, tax: string, category: string, rate_pct: string, note: ?string}> $lines
      * @param list<array{name: string, type: string, rate_pct: string, tax: ?string}> $jurisdictions
      * @param list<string> $skippedNontaxableLineIds
+     * @param CalculatedShipping|null $shipping Engine's calculated shipping segment (CP-9 / SDK v0.3.0). Null when the request omitted shipping OR the engine returned no shipping result (older engine, free shipping, non-taxable destination, etc.).
      */
     public function __construct(
         public string $subtotal,
@@ -32,6 +34,7 @@ final readonly class TaxBreakdown
         public array $jurisdictions,
         public array $skippedNontaxableLineIds,
         public string $disclaimer,
+        public ?CalculatedShipping $shipping = null,
     ) {
     }
 
@@ -71,6 +74,7 @@ final readonly class TaxBreakdown
             jurisdictions: $jurisdictionsAggregated,
             skippedNontaxableLineIds: $skippedNontaxIds,
             disclaimer: $engineResponse->disclaimer,
+            shipping: $engineResponse->shipping,
         );
     }
 
