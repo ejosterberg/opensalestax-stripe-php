@@ -6,8 +6,8 @@ declare(strict_types=1);
 
 namespace OpenSalesTax\Stripe;
 
-use OpenSalesTax\Responses\CalculateResponse;
 use OpenSalesTax\Responses\CalculatedShipping;
+use OpenSalesTax\Responses\CalculateResponse;
 
 /**
  * Result of a Stripe-source tax calculation.
